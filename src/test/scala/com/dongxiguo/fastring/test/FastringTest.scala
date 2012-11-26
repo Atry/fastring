@@ -71,4 +71,22 @@ final class FastringTest {
         }).mkString
       } bar")
   }
+
+  @Test
+  final def test6() {
+    import com.dongxiguo.fastring.Fastring.Implicits._
+    def a = 1
+
+    Assert.assertEquals(
+      fast"baz $a foo ${
+        (for (i <- 0 until 5) yield {
+          fast"i=${(-i).filled(3, '0')}"
+        }).mkFastring
+      } bar".toString,
+      s"baz $a foo ${
+        (for (i <- 0 until 5) yield {
+          f"i=${-i}%03d"
+        }).mkString
+      } bar")
+  }
 }
