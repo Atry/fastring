@@ -32,53 +32,53 @@ final object Fastring {
 
   final class FromAny(any: Any) extends Fastring {
     @inline
-    override final def foreach[U](f: String => U) {
-      f(any.toString)
+    override final def foreach[U](visitor: String => U) {
+      visitor(any.toString)
     }
   }
 
   final class FromString(string: String) extends Fastring {
 
     @inline
-    override final def foreach[U](f: String => U) {
-      f(string)
+    override final def foreach[U](visitor: String => U) {
+      visitor(string)
     }
   }
 
   final class FilledLong(value: Long, minWidth: Int, filledChar: Char, radix: Int)
     extends Fastring {
-    override final def foreach[U](f: String => U) {
+    override final def foreach[U](visitor: String => U) {
       val unfilled = java.lang.Long.toString(value, radix)
       if (unfilled.length < minWidth) {
         if (value >= 0) {
-          f(new String(Array.fill(minWidth - unfilled.length)(filledChar)))
-          f(unfilled)
+          visitor(new String(Array.fill(minWidth - unfilled.length)(filledChar)))
+          visitor(unfilled)
         } else {
-          f("-")
-          f(new String(Array.fill(minWidth - unfilled.length)(filledChar)))
-          f(unfilled.substring(1))
+          visitor("-")
+          visitor(new String(Array.fill(minWidth - unfilled.length)(filledChar)))
+          visitor(unfilled.substring(1))
         }
       } else {
-        f(unfilled)
+        visitor(unfilled)
       }
     }
   }
 
   final class FilledInt(value: Int, minWidth: Int, filledChar: Char, radix: Int)
     extends Fastring {
-    override final def foreach[U](f: String => U) {
+    override final def foreach[U](visitor: String => U) {
       val unfilled = java.lang.Integer.toString(value, radix)
       if (unfilled.length < minWidth) {
         if (value >= 0) {
-          f(new String(Array.fill(minWidth - unfilled.length)(filledChar)))
-          f(unfilled)
+          visitor(new String(Array.fill(minWidth - unfilled.length)(filledChar)))
+          visitor(unfilled)
         } else {
-          f("-")
-          f(new String(Array.fill(minWidth - unfilled.length)(filledChar)))
-          f(unfilled.substring(1))
+          visitor("-")
+          visitor(new String(Array.fill(minWidth - unfilled.length)(filledChar)))
+          visitor(unfilled.substring(1))
         }
       } else {
-        f(unfilled)
+        visitor(unfilled)
       }
     }
   }
@@ -130,9 +130,9 @@ final object Fastring {
       val parts = this.parts
       this.parts = null
       new Fastring {
-        override final def foreach[U](f: String => U) {
+        override final def foreach[U](visitor: String => U) {
           for (part <- parts) {
-            part.foreach(f)
+            part.foreach(visitor)
           }
         }
       }
@@ -198,17 +198,17 @@ final object Fastring {
     final object MkFastring {
 
       final def mkFastring_impl(c: Context): c.Expr[Fastring] = {
-        val c.universe.Select(hasMkFastringTree, _) =
+        val c.universe.Select(mkFastringTree, _) =
           c.macroApplication
-        val hasMkFastringExpr = c.Expr[MkFastring[_]](hasMkFastringTree)
+        val mkFastringExpr = c.Expr[MkFastring[_]](mkFastringTree)
         c.universe.reify {
           // Workaround for https://issues.scala-lang.org/browse/SI-6711
-          val h = hasMkFastringExpr.splice
+          val m = mkFastringExpr.splice
           new Fastring {
             @inline
-            override final def foreach[U](f: String => U) {
-              for (subCollection <- h.collection) {
-                Fastring(subCollection).foreach(f)
+            override final def foreach[U](visitor: String => U) {
+              for (subCollection <- m.underlying) {
+                Fastring(subCollection).foreach(visitor)
               }
             }
           }
@@ -216,24 +216,24 @@ final object Fastring {
       }
 
       final def mkFastringWithSeperator_impl(c: Context)(seperator: c.Expr[String]): c.Expr[Fastring] = {
-        val c.universe.Apply(c.universe.Select(hasMkFastringTree, _), _) =
+        val c.universe.Apply(c.universe.Select(mkFastringTree, _), _) =
           c.macroApplication
-        val hasMkFastringExpr = c.Expr[MkFastring[_]](hasMkFastringTree)
+        val mkFastringExpr = c.Expr[MkFastring[_]](mkFastringTree)
         c.universe.reify {
           // Workaround for https://issues.scala-lang.org/browse/SI-6711
           val s = seperator.splice
-          val h = hasMkFastringExpr.splice
+          val m = mkFastringExpr.splice
           new Fastring {
             @inline
-            override final def foreach[U](f: String => U) {
+            override final def foreach[U](visitor: String => U) {
               var first = true
-              for (subCollection <- h.collection) {
+              for (subCollection <- m.underlying) {
                 if (first) {
                   first = false
                 } else {
-                  f(s)
+                  visitor(s)
                 }
-                Fastring(subCollection).foreach(f)
+                Fastring(subCollection).foreach(visitor)
               }
             }
           }
@@ -241,21 +241,21 @@ final object Fastring {
       }
     }
 
-    implicit final class MkFastring[A](val collection: TraversableOnce[A]) extends AnyVal {
+    implicit final class MkFastring[A](val underlying: TraversableOnce[A]) extends AnyVal {
       import MkFastring._
       final def mkFastring: Fastring = macro mkFastring_impl
       final def mkFastring(seperator: String): Fastring = macro mkFastringWithSeperator_impl
     }
 
-    implicit final class LongFilled(value: Long) {
+    implicit final class LongFilled(underlying: Long) {
       final def filled(minWidth: Int, filledChar: Char = ' ', radix: Int = 10) =
-        new FilledLong(value, minWidth, filledChar, radix)
+        new FilledLong(underlying, minWidth, filledChar, radix)
     }
 
-    implicit final class IntFilled(value: Int) {
+    implicit final class IntFilled(underlying: Int) {
 
       final def filled(minWidth: Int, filledChar: Char = ' ', radix: Int = 10) =
-        new FilledInt(value, minWidth, filledChar, radix)
+        new FilledInt(underlying, minWidth, filledChar, radix)
     }
 
     import language.implicitConversions
