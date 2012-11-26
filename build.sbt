@@ -26,6 +26,8 @@ scalacOptions += "-feature"
 
 scalacOptions += "-deprecation"
 
+scalacOptions += "-unchecked"
+
 scalacOptions ++= Seq("-Xelide-below", "FINEST")
 
 crossScalaVersions := Seq("2.10.0-RC2")

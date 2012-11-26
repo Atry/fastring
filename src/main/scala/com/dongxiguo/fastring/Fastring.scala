@@ -1,6 +1,21 @@
+/*
+ * Copyright 2012 杨博 (Yang Bo)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.dongxiguo.fastring
 
-import scala.reflect.macros.Context
 import language.experimental.macros
 import scala.collection.TraversableLike
 import scala.collection.mutable.LazyBuilder
@@ -24,7 +39,13 @@ abstract class Fastring extends TraversableLike[String, Fastring] with Traversab
     }
   }
 
-  final override def toString = mkString
+  override final def toString = {
+    val sb = new java.lang.StringBuffer
+    for (s <- this) {
+      sb.append(s)
+    }
+    sb.toString
+  }
 
 }
 
@@ -142,24 +163,23 @@ final object Fastring {
   final object Implicits {
     object FastringContext {
       final def fast_impl(c: Context)(arguments: c.Expr[Any]*): c.Expr[Fastring] = {
-
-        val c.universe.Apply(c.universe.Select(fastringContextContextTree, _), _) =
+        import c.universe._
+        val Apply(Select(Apply(_, List(Apply(_, partTrees))), _), _) =
           c.macroApplication
-        val fastringContextExpr = c.Expr[FastringContext](fastringContextContextTree)
+        assert(partTrees.length == arguments.length + 1)
         val visitAllExpr =
           0.until(arguments.length).foldLeft[c.Expr[Unit]](c.Expr(c.universe.EmptyTree)) { (prefixExpr, i) =>
             val visitorExpr = c.Expr[String => _](c.universe.Ident("visitor"))
-            val partsExpr = c.Expr[Seq[String]](c.universe.Ident("parts"))
-            val iExpr = c.Expr[Int](c.universe.Literal(c.universe.Constant(i)))
             val argumentExpr = c.Expr[Any](c.universe.Ident("__arguments" + i))
+            val partExpr = c.Expr[String](partTrees(i))
             c.universe.reify {
               prefixExpr.splice
-              visitorExpr.splice(partsExpr.splice(iExpr.splice))
+              visitorExpr.splice(partExpr.splice)
               Fastring(argumentExpr.splice).foreach(visitorExpr.splice)
             }
           }
         // Workaround for https://issues.scala-lang.org/browse/SI-6711
-        val valdefTrees =
+        val valDefTrees =
           (for ((argumentExpr, i) <- arguments.iterator.zipWithIndex) yield {
             c.universe.ValDef(
               c.universe.Modifiers(),
@@ -167,21 +187,18 @@ final object Fastring {
               c.universe.TypeTree(),
               argumentExpr.tree)
           })
-        val numArgumentsExpr =
-          c.Expr[Int](c.universe.Literal(c.universe.Constant(arguments.length)))
+        val lastPartExpr = c.Expr[String](partTrees(arguments.length))
         val newFastringExpr =
           c.universe.reify {
             new Fastring {
               @inline
               override final def foreach[U](visitor: String => U) {
-                val parts = fastringContextExpr.splice.stringContext.parts
-                assert(parts.length == numArgumentsExpr.splice + 1)
                 visitAllExpr.splice
-                visitor(parts(numArgumentsExpr.splice))
+                visitor(lastPartExpr.splice)
               }
             }
           }
-        c.Expr(c.universe.Block(valdefTrees.toList, newFastringExpr.tree))
+        c.Expr(c.universe.Block(valDefTrees.toList, newFastringExpr.tree))
       }
     }
 
@@ -198,10 +215,10 @@ final object Fastring {
     final object MkFastring {
 
       final def mkFastring_impl(c: Context): c.Expr[Fastring] = {
-        val c.universe.Select(mkFastringTree, _) =
-          c.macroApplication
+        import c.universe._
+        val Select(mkFastringTree, _) = c.macroApplication
         val mkFastringExpr = c.Expr[MkFastring[_]](mkFastringTree)
-        c.universe.reify {
+        reify {
           // Workaround for https://issues.scala-lang.org/browse/SI-6711
           val m = mkFastringExpr.splice
           new Fastring {
@@ -216,10 +233,10 @@ final object Fastring {
       }
 
       final def mkFastringWithSeperator_impl(c: Context)(seperator: c.Expr[String]): c.Expr[Fastring] = {
-        val c.universe.Apply(c.universe.Select(mkFastringTree, _), _) =
-          c.macroApplication
+        import c.universe._
+        val Apply(Select(mkFastringTree, _), _) = c.macroApplication
         val mkFastringExpr = c.Expr[MkFastring[_]](mkFastringTree)
-        c.universe.reify {
+        reify {
           // Workaround for https://issues.scala-lang.org/browse/SI-6711
           val s = seperator.splice
           val m = mkFastringExpr.splice
