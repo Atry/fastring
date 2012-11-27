@@ -68,6 +68,7 @@ final object Fastring {
 
   final class FilledLong(value: Long, minWidth: Int, filledChar: Char, radix: Int)
     extends Fastring {
+    @inline
     override final def foreach[U](visitor: String => U) {
       val unfilled = java.lang.Long.toString(value, radix)
       if (unfilled.length < minWidth) {
@@ -87,6 +88,7 @@ final object Fastring {
 
   final class FilledInt(value: Int, minWidth: Int, filledChar: Char, radix: Int)
     extends Fastring {
+    @inline
     override final def foreach[U](visitor: String => U) {
       val unfilled = java.lang.Integer.toString(value, radix)
       if (unfilled.length < minWidth) {
@@ -114,18 +116,18 @@ final object Fastring {
     val visitorExpr = c.Expr[String => _](c.universe.Ident("visitor"))
     val foreachBodyExpr = rest.foldLeft[c.Expr[Unit]](
       c.universe.reify {
-        Fastring(argument1).foreach(visitorExpr.splice)
-        Fastring(argument2).foreach(visitorExpr.splice)
+        _root_.com.dongxiguo.fastring.Fastring(argument1).foreach(visitorExpr.splice)
+        _root_.com.dongxiguo.fastring.Fastring(argument2).foreach(visitorExpr.splice)
       }) { (prefixExpr, argument) =>
         c.universe.reify {
           prefixExpr.splice
-          Fastring(argument).foreach(visitorExpr.splice)
+          _root_.com.dongxiguo.fastring.Fastring(argument).foreach(visitorExpr.splice)
         }
       }
     c.universe.reify {
-      new Fastring {
+      new _root_.com.dongxiguo.fastring.Fastring {
         @inline
-        override final def foreach[U](visitor: String => U) {
+        override final def foreach[U](visitor: _root_.scala.Predef.String => U) {
           foreachBodyExpr.splice
         }
       }
@@ -151,6 +153,7 @@ final object Fastring {
       val parts = this.parts
       this.parts = null
       new Fastring {
+        @inline
         override final def foreach[U](visitor: String => U) {
           for (part <- parts) {
             part.foreach(visitor)
@@ -167,15 +170,24 @@ final object Fastring {
         val Apply(Select(Apply(_, List(Apply(_, partTrees))), _), _) =
           c.macroApplication
         assert(partTrees.length == arguments.length + 1)
+        val visitorExpr = c.Expr[String => _](c.universe.Ident("visitor"))
+        val visitPartExprs = for (partTree <- partTrees) yield {
+          val Literal(Constant(part)) = partTree
+          if (part == "") {
+            reify(())
+          } else {
+            val partExpr = c.Expr[String](partTree)
+            reify(visitorExpr.splice(partExpr.splice))
+          }
+        }
         val visitAllExpr =
           0.until(arguments.length).foldLeft[c.Expr[Unit]](c.Expr(c.universe.EmptyTree)) { (prefixExpr, i) =>
-            val visitorExpr = c.Expr[String => _](c.universe.Ident("visitor"))
             val argumentExpr = c.Expr[Any](c.universe.Ident("__arguments" + i))
-            val partExpr = c.Expr[String](partTrees(i))
+            val visitPartExpr = visitPartExprs(i)
             c.universe.reify {
               prefixExpr.splice
-              visitorExpr.splice(partExpr.splice)
-              Fastring(argumentExpr.splice).foreach(visitorExpr.splice)
+              visitPartExpr.splice
+              _root_.com.dongxiguo.fastring.Fastring(argumentExpr.splice).foreach(visitorExpr.splice)
             }
           }
         // Workaround for https://issues.scala-lang.org/browse/SI-6711
@@ -187,14 +199,14 @@ final object Fastring {
               c.universe.TypeTree(),
               argumentExpr.tree)
           })
-        val lastPartExpr = c.Expr[String](partTrees(arguments.length))
+        val visitLastPartExpr = visitPartExprs(arguments.length)
         val newFastringExpr =
           c.universe.reify {
-            new Fastring {
+            new _root_.com.dongxiguo.fastring.Fastring {
               @inline
-              override final def foreach[U](visitor: String => U) {
+              override final def foreach[U](visitor: _root_.scala.Predef.String => U) {
                 visitAllExpr.splice
-                visitor(lastPartExpr.splice)
+                visitLastPartExpr.splice
               }
             }
           }
@@ -221,11 +233,11 @@ final object Fastring {
         reify {
           // Workaround for https://issues.scala-lang.org/browse/SI-6711
           val m = mkFastringExpr.splice
-          new Fastring {
+          new _root_.com.dongxiguo.fastring.Fastring {
             @inline
-            override final def foreach[U](visitor: String => U) {
+            override final def foreach[U](visitor: _root_.scala.Predef.String => U) {
               for (subCollection <- m.underlying) {
-                Fastring(subCollection).foreach(visitor)
+                _root_.com.dongxiguo.fastring.Fastring(subCollection).foreach(visitor)
               }
             }
           }
@@ -240,9 +252,9 @@ final object Fastring {
           // Workaround for https://issues.scala-lang.org/browse/SI-6711
           val s = seperator.splice
           val m = mkFastringExpr.splice
-          new Fastring {
+          new _root_.com.dongxiguo.fastring.Fastring {
             @inline
-            override final def foreach[U](visitor: String => U) {
+            override final def foreach[U](visitor: _root_.scala.Predef.String => U) {
               var first = true
               for (subCollection <- m.underlying) {
                 if (first) {
@@ -250,7 +262,7 @@ final object Fastring {
                 } else {
                   visitor(s)
                 }
-                Fastring(subCollection).foreach(visitor)
+                _root_.com.dongxiguo.fastring.Fastring(subCollection).foreach(visitor)
               }
             }
           }
