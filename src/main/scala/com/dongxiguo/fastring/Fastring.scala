@@ -164,6 +164,8 @@ final object Fastring {
   }
 
   final object Implicits {
+    type Fastring = com.dongxiguo.fastring.Fastring
+
     object FastringContext {
       final def fast_impl(c: Context)(arguments: c.Expr[Any]*): c.Expr[Fastring] = {
         import c.universe._
@@ -172,11 +174,12 @@ final object Fastring {
         assert(partTrees.length == arguments.length + 1)
         val visitorExpr = c.Expr[String => _](c.universe.Ident("visitor"))
         val visitPartExprs = for (partTree <- partTrees) yield {
-          val Literal(Constant(part)) = partTree
+          val Literal(Constant(part: String)) = partTree
           if (part == "") {
             reify(())
           } else {
-            val partExpr = c.Expr[String](partTree)
+            val partExpr =
+              c.Expr[String](Literal(Constant(StringContext.treatEscapes(part))))
             reify(visitorExpr.splice(partExpr.splice))
           }
         }
@@ -216,9 +219,6 @@ final object Fastring {
 
     implicit final class FastringContext(val stringContext: StringContext) extends AnyVal {
       import FastringContext._
-
-      @inline
-      final def fast() = Fastring(stringContext.parts(0))
 
       @inline
       final def fast(arguments: Any*) = macro fast_impl
