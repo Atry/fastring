@@ -51,6 +51,11 @@ abstract class Fastring extends TraversableLike[String, Fastring] with Traversab
 
 final object Fastring {
 
+  final object Empty extends Fastring {
+    @inline
+    override final def foreach[U](visitor: String => U) {}
+  }
+
   final class FromAny(any: Any) extends Fastring {
     @inline
     override final def foreach[U](visitor: String => U) {
@@ -105,6 +110,8 @@ final object Fastring {
       }
     }
   }
+  
+  final def empty = Empty
 
   @inline
   final def apply[A <: Fastring](fastring: A): A = fastring
