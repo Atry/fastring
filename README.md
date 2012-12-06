@@ -18,7 +18,7 @@ For example, if you are writing a CGI page:
 ## It's extremely fast
 
 I made a [benchmark](https://github.com/Atry/fastring/blob/master/benchmark/src/main/scala/com/dongxiguo/fastring/benchmark/FastringBenchmark.scala).
-I use 4 different ways to create a 545-length string.
+I used 4 different ways to create a 545-length string.
 
 1. Fastring (`fast"Concat with $something"` syntax);
 2. String concatenation (`s"Concat with $something"` syntax);
