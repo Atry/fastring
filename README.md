@@ -160,7 +160,7 @@ There is a `mkFastring` method for `Seq`:
     // Got Fastring("Seq.mkFastring: Hello, world")
     fast"Seq.mkFastring: ${Seq("Hello", "world").mkFastring(", ")}"
     
-    // Works, but slower.
+    // Also works, but slower.
     // Got Fastring("Seq.mkString: Hello, world")
     fast"Seq.mkString: ${Seq("Hello", "world").mkString(", ")}"
 
