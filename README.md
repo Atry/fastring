@@ -142,7 +142,7 @@ Took 7436 nanoseconds to generate a 545-length string.<br/>(Simple but extremely
 It avoids coping content for nested String Interpolation.
 Thus, `Fastring` is very suitable to generate complex text content(e.g. HTML, JSON).
 
-For example, in the previous benchmark for `Fastring`, the most of time is spend on invoking `toString`.
+For example, in the previous benchmark for `Fastring`, the most of time is spent on invoking `toString`.
 You can avoid these overhead if you do not need a whole string. For example:
 
     // Faster than: print(fast"My lazy string from $something")
