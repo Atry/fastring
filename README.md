@@ -171,7 +171,7 @@ And a `filled` method for `Byte`, `Short`, `Int` and `Long`:
 
 Put these lines in your `build.sbt`:
 
-    libraryDependencies += "com.dongxiguo" %% "fastring" % "0.1.1"
+    libraryDependencies += "com.dongxiguo" %% "fastring" % "0.2.0"
     
     scalaVersion := "2.10.0-RC3"
 
