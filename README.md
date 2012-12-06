@@ -1,7 +1,7 @@
 # Fastring
 
 **Fastring** is a string formatting library for Scala.
-`Fastring` can also be used as a template engine,
+`Fastring` is also designed to be a template engine,
 and it is an excellent replacement of JSP, [Scalate](http://scalate.fusesource.org/) or [FreeMarker](http://freemarker.sourceforge.net/).
 
 ## It's simple to use
