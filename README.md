@@ -21,7 +21,7 @@ I made a [benchmark](https://github.com/Atry/fastring/blob/master/benchmark/src/
 I use 4 different ways to create a 545-length string.
 
 1. Fastring (`fast"Concat with $something"` syntax);
-2. Simple string concatenation (`s"Concat with $something"` syntax);
+2. String concatenation (`s"Concat with $something"` syntax);
 3. Handwritten `StringBuilder` (`stringBuilder ++= "Build from " ++= something` syntax);
 4. `java.util.Formatter` (`f"Format with $something"` syntax).
 
@@ -52,7 +52,7 @@ Took 669 nanoseconds to generate a 545-length string.<br/>(Simple and fast)
 </tr>
 <tr>
 <th>
-Simple string concatenation
+String concatenation
 </th>
 <td>
 <pre><code>def s(a: Int) =
