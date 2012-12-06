@@ -152,24 +152,28 @@ You can invoke `foreach` because `Fastring` is just a `Traversable[String]`.
 
 ## Utilities
 
-There is a `mkFastring` method for all Scala collections:
+There is a `mkFastring` method for `Seq`:
 
     // Enable mkFastring method
     import com.dongxiguo.fastring.Fastring.Implicits._
     
-    // Got Fastring("Hello, world")
-    Seq("Hello", "world").mkFastring(", ")
+    // Got Fastring("Seq.mkFastring: Hello, world")
+    fast"Seq.mkFastring: ${Seq("Hello", "world").mkFastring(", ")}"
+    
+    // Works, but slower.
+    // Got Fastring("Seq.mkString: Hello, world")
+    fast"Seq.mkString: ${Seq("Hello", "world").mkString(", ")}"
 
 And a `filled` method for `Byte`, `Short`, `Int` and `Long`:
 
     // Enable filled method
     import com.dongxiguo.fastring.Fastring.Implicits._
     
-    // Got Fastring("  123")
-    123.filled(5)
+    // Got Fastring("Int.filled:   123")
+    fast"Int.filled: ${123.filled(5)}"
     
-    // Got Fastring("00123")
-    123.filled(5, '0')
+    // Got Fastring("Int.filled: 00123")
+    fast"Int.filled: ${123.filled(5, '0')}"
 
 ## Installation
 
