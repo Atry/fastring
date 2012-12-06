@@ -45,7 +45,7 @@ Fastring
 fast(0).toString</code></pre>
 </td>
 <td>
-It took 669 nanoseconds to generate a 545-length string.<br/>(Simple and fast)
+Took 669 nanoseconds to generate a 545-length string.<br/>(Simple and fast)
 </td>
 </tr>
 <tr>
@@ -67,7 +67,7 @@ Simple string concatenation
 s(0)</code></pre>
 </td>
 <td>
-It took 1738 nanoseconds to generate a 545-length string.<br/>(Simple but slow)
+Took 1738 nanoseconds to generate a 545-length string.<br/>(Simple but slow)
 </td>
 </tr>
 <tr>
@@ -109,7 +109,7 @@ sb(s, 0)
 s.toString</code></pre>
 </td>
 <td>
-It took 537 nanoseconds to generate a 545-length string.<br/>(Fast but too trivial)
+Took 537 nanoseconds to generate a 545-length string.<br/>(Fast but too trivial)
 </td>
 </tr>
 <tr>
@@ -131,7 +131,7 @@ It took 537 nanoseconds to generate a 545-length string.<br/>(Fast but too trivi
 f(0)</code></pre>
 </td>
 <td>
-It took 7436 nanoseconds to generate a 545-length string.<br/>(Simple but extremely slow)
+Took 7436 nanoseconds to generate a 545-length string.<br/>(Simple but extremely slow)
 </td>
 </tr>
 </table>
