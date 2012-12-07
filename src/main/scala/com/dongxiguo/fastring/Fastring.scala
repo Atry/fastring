@@ -283,6 +283,12 @@ final object Fastring {
       final def mkFastring(seperator: String): Fastring = macro mkFastringWithSeperator_impl
     }
 
+    implicit final class ArrayMkFastring[A](val underlying: Array[A]) extends AnyVal {
+      import MkFastring._
+      final def mkFastring: Fastring = macro mkFastring_impl
+      final def mkFastring(seperator: String): Fastring = macro mkFastringWithSeperator_impl
+    }
+
     implicit final class LongFilled(underlying: Long) {
       final def filled(minWidth: Int, filledChar: Char = ' ', radix: Int = 10) =
         new FilledLong(underlying, minWidth, filledChar, radix)
