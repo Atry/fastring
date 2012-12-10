@@ -289,19 +289,23 @@ final object Fastring {
       final def mkFastring(seperator: String): Fastring = macro mkFastringWithSeperator_impl
     }
 
-    implicit final class LongFilled(underlying: Long) {
+    implicit final class LongFilled(val underlying: Long) extends AnyVal {
+      @inline
       final def filled(minWidth: Int, filledChar: Char = ' ', radix: Int = 10) =
         new FilledLong(underlying, minWidth, filledChar, radix)
     }
 
-    implicit final class IntFilled(underlying: Int) {
-
+    implicit final class IntFilled(val underlying: Int) extends AnyVal {
+      @inline
       final def filled(minWidth: Int, filledChar: Char = ' ', radix: Int = 10) =
         new FilledInt(underlying, minWidth, filledChar, radix)
     }
 
     import language.implicitConversions
+    @inline
     implicit final def byteFilled(byte: Byte) = new IntFilled(byte)
+
+    @inline
     implicit final def shortFilled(short: Short) = new IntFilled(short)
 
   }
