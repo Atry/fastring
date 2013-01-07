@@ -177,10 +177,13 @@ And a `filled` method for `Byte`, `Short`, `Int` and `Long`:
 
 ## Installation
 
-Put these lines in your `build.sbt`:
+Put these lines in your `build.sbt` if you use Sbt(http://www.scala-sbt.org/) `0.12.x`:
 
     libraryDependencies += "com.dongxiguo" %% "fastring" % "0.2.1"
     
     scalaVersion := "2.10.0"
 
-Note that `Fastring` requires [Scala](http://www.scala-lang.org/) `2.10.x` and [Sbt](http://www.scala-sbt.org/) `0.12.x`.
+See http://mvnrepository.com/artifact/com.dongxiguo/fastring_2.10/0.2.1 if you use [Maven](http://maven.apache.org/)
+or other build systems.
+
+Note that `Fastring` requires [Scala](http://www.scala-lang.org/) `2.10.x`.
