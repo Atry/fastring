@@ -6,7 +6,7 @@ and it is an excellent replacement of JSP, [Scalate](http://scalate.fusesource.o
 
 ## It's simple to use
 
-`Fastring` use [string interpolation](http://docs.scala-lang.org/sips/pending/string-interpolation.html) syntax.
+`Fastring` uses [string interpolation](http://docs.scala-lang.org/sips/pending/string-interpolation.html) syntax.
 For example, if you are writing a CGI page:
 
     import com.dongxiguo.fastring.Fastring.Implicits._
