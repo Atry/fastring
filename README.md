@@ -77,7 +77,7 @@ Took 1738 nanoseconds to generate a 545-length string.<br/>(Simple but slow)
 Handwritten <code>StringBuilder</code>
 </th>
 <td>
-<pre><code>def sb(sb: StringBuilder, a: Int) = {
+<pre><code>def sb(sb: StringBuilder, a: Int) {
   sb ++= "head "
   var first = true
   for (j &lt;- 0 until 10 view) {
