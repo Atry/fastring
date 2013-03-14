@@ -120,7 +120,7 @@ final object Fastring {
   final def apply(any: Any) = new FromAny(any)
 
   final def applyVarargs_impl(c: Context)(argument1: c.Expr[Any], argument2: c.Expr[Any], rest: c.Expr[Any]*): c.Expr[Fastring] = {
-    val visitorExpr = c.Expr[String => _](c.universe.Ident("visitor"))
+    val visitorExpr = c.Expr[String => _](c.universe.Ident(c.universe.newTermName("visitor")))
     val foreachBodyExpr = rest.foldLeft[c.Expr[Unit]](
       c.universe.reify {
         _root_.com.dongxiguo.fastring.Fastring(argument1).foreach(visitorExpr.splice)
@@ -179,7 +179,7 @@ final object Fastring {
         val Apply(Select(Apply(_, List(Apply(_, partTrees))), _), _) =
           c.macroApplication
         assert(partTrees.length == arguments.length + 1)
-        val visitorExpr = c.Expr[String => _](c.universe.Ident("visitor"))
+        val visitorExpr = c.Expr[String => _](c.universe.Ident(newTermName("visitor")))
         val visitPartExprs = for (partTree <- partTrees) yield {
           val Literal(Constant(part: String)) = partTree
           if (part == "") {
@@ -192,7 +192,7 @@ final object Fastring {
         }
         val visitAllExpr =
           0.until(arguments.length).foldLeft[c.Expr[Unit]](c.Expr(c.universe.EmptyTree)) { (prefixExpr, i) =>
-            val argumentExpr = c.Expr[Any](c.universe.Ident("__arguments" + i))
+            val argumentExpr = c.Expr[Any](c.universe.Ident(newTermName("__arguments" + i)))
             val visitPartExpr = visitPartExprs(i)
             c.universe.reify {
               prefixExpr.splice
