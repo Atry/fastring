@@ -181,7 +181,7 @@ Put these lines in your `build.sbt` if you use Sbt(http://www.scala-sbt.org/) `0
 
     libraryDependencies += "com.dongxiguo" %% "fastring" % "0.2.1"
     
-    scalaVersion := "2.10.0"
+    scalaVersion := "2.10.1"
 
 See http://mvnrepository.com/artifact/com.dongxiguo/fastring_2.10/0.2.1 if you use [Maven](http://maven.apache.org/)
 or other build systems.
