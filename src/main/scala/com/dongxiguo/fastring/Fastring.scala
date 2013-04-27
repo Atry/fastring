@@ -40,6 +40,7 @@ abstract class Fastring extends TraversableLike[String, Fastring] with Traversab
   }
 
   override final def toString = {
+    // A little faster than scala.StringBuilder
     val sb = new java.lang.StringBuffer
     for (s <- this) {
       sb.append(s)
