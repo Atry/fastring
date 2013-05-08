@@ -33,7 +33,8 @@ This is the result from my Intel i5-3450 computer:
 Fastring
 </th>
 <td>
-<pre><code>def fast(a: Int) =
+<pre><code>import com.dongxiguo.fastring.Fastring.Implicits._
+def fast(a: Int) =
   fast"head ${
     (for (j &lt;- 0 until 10 view) yield {
       fast"baz$j $a foo ${
