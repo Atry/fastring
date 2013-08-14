@@ -18,7 +18,7 @@ For example, if you are writing a CGI page:
 ## It's extremely fast
 
 I made a [benchmark](https://github.com/Atry/fastring/blob/master/benchmark/src/main/scala/com/dongxiguo/fastring/benchmark/FastringBenchmark.scala).
-I used 4 different ways to create a 545-length string.
+I used 4 different ways to create a 545-characters string.
 
 1. Fastring (`fast"Concat with $something"` syntax);
 2. String concatenation (`s"Concat with $something"` syntax);
@@ -48,7 +48,7 @@ def fast(a: Int) =
 fast(0).toString</code></pre>
 </td>
 <td>
-Took 669 nanoseconds to generate a 545-length string.<br/>(Simple and fast)
+Took 669 nanoseconds to generate a 545-characters string.<br/>(Simple and fast)
 </td>
 </tr>
 <tr>
@@ -70,7 +70,7 @@ String concatenation
 s(0)</code></pre>
 </td>
 <td>
-Took 1738 nanoseconds to generate a 545-length string.<br/>(Simple but slow)
+Took 1738 nanoseconds to generate a 545-characters string.<br/>(Simple but slow)
 </td>
 </tr>
 <tr>
@@ -114,7 +114,7 @@ sb(s, 0)
 s.toString</code></pre>
 </td>
 <td>
-Took 537 nanoseconds to generate a 545-length string.<br/>(Fast but too trivial)
+Took 537 nanoseconds to generate a 545-characters string.<br/>(Fast but too trivial)
 </td>
 </tr>
 <tr>
@@ -136,7 +136,7 @@ Took 537 nanoseconds to generate a 545-length string.<br/>(Fast but too trivial)
 f(0)</code></pre>
 </td>
 <td>
-Took 7436 nanoseconds to generate a 545-length string.<br/>(Simple but extremely slow)
+Took 7436 nanoseconds to generate a 545-characters string.<br/>(Simple but extremely slow)
 </td>
 </tr>
 </table>
