@@ -87,7 +87,9 @@ Handwritten <code>StringBuilder</code>
     } else {
       sb ++= ""&lt;hr/&gt;""
     }
-    sb ++= "baz" ++= j.toString ++= " " ++= a.toString ++= " foo ";
+    sb ++=
+      "baz" ++= j.toString ++=
+      " " ++= a.toString ++= " foo ";
     {
       var first = true
       for (i &lt;- 0 until 4 view) {
