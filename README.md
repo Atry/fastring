@@ -18,7 +18,7 @@ For example, if you are writing a CGI page:
 ## It's extremely fast
 
 I made a [benchmark](https://github.com/Atry/fastring/blob/master/benchmark/src/main/scala/com/dongxiguo/fastring/benchmark/FastringBenchmark.scala).
-I used 4 different ways to create a 545-length string.
+I used 4 different ways to create a 545-characters string.
 
 1. Fastring (`fast"Concat with $something"` syntax);
 2. String concatenation (`s"Concat with $something"` syntax);
@@ -33,7 +33,8 @@ This is the result from my Intel i5-3450 computer:
 Fastring
 </th>
 <td>
-<pre><code>def fast(a: Int) =
+<pre><code>import com.dongxiguo.fastring.Fastring.Implicits._
+def fast(a: Int) =
   fast"head ${
     (for (j &lt;- 0 until 10 view) yield {
       fast"baz$j $a foo ${
@@ -47,7 +48,7 @@ Fastring
 fast(0).toString</code></pre>
 </td>
 <td>
-Took 669 nanoseconds to generate a 545-length string.<br/>(Simple and fast)
+Took 669 nanoseconds to generate a 545-characters string.<br/>(Simple and fast)
 </td>
 </tr>
 <tr>
@@ -69,7 +70,7 @@ String concatenation
 s(0)</code></pre>
 </td>
 <td>
-Took 1738 nanoseconds to generate a 545-length string.<br/>(Simple but slow)
+Took 1738 nanoseconds to generate a 545-characters string.<br/>(Simple but slow)
 </td>
 </tr>
 <tr>
@@ -86,7 +87,9 @@ Handwritten <code>StringBuilder</code>
     } else {
       sb ++= ""&lt;hr/&gt;""
     }
-    sb ++= "baz" ++= j.toString ++= " " ++= a.toString ++= " foo ";
+    sb ++=
+      "baz" ++= j.toString ++=
+      " " ++= a.toString ++= " foo ";
     {
       var first = true
       for (i &lt;- 0 until 4 view) {
@@ -111,7 +114,7 @@ sb(s, 0)
 s.toString</code></pre>
 </td>
 <td>
-Took 537 nanoseconds to generate a 545-length string.<br/>(Fast but too trivial)
+Took 537 nanoseconds to generate a 545-characters string.<br/>(Fast but too trivial)
 </td>
 </tr>
 <tr>
@@ -133,7 +136,7 @@ Took 537 nanoseconds to generate a 545-length string.<br/>(Fast but too trivial)
 f(0)</code></pre>
 </td>
 <td>
-Took 7436 nanoseconds to generate a 545-length string.<br/>(Simple but extremely slow)
+Took 7436 nanoseconds to generate a 545-characters string.<br/>(Simple but extremely slow)
 </td>
 </tr>
 </table>
@@ -181,7 +184,7 @@ Put these lines in your `build.sbt` if you use Sbt(http://www.scala-sbt.org/) `0
 
     libraryDependencies += "com.dongxiguo" %% "fastring" % "0.2.1"
     
-    scalaVersion := "2.10.0"
+    scalaVersion := "2.10.1"
 
 See http://mvnrepository.com/artifact/com.dongxiguo/fastring_2.10/0.2.1 if you use [Maven](http://maven.apache.org/)
 or other build systems.
