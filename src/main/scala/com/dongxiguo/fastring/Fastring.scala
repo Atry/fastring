@@ -110,7 +110,7 @@ final object Fastring {
       }
     }
   }
-  
+
   final def empty = Empty
 
   @inline
@@ -174,7 +174,9 @@ final object Fastring {
     type Fastring = com.dongxiguo.fastring.Fastring
 
     object FastringContext {
-      final def fast_impl(c: Context)(arguments: c.Expr[Any]*): c.Expr[Fastring] = {
+
+      private def newLocalFastringClass(c: Context, escapeFunction: String => String)(arguments: Seq[c.Expr[Any]]): c.Expr[Fastring] = {
+
         import c.universe._
         val Apply(Select(Apply(_, List(Apply(_, partTrees))), _), _) =
           c.macroApplication
@@ -186,7 +188,7 @@ final object Fastring {
             reify(())
           } else {
             val partExpr =
-              c.Expr[String](Literal(Constant(StringContext.treatEscapes(part))))
+              c.Expr[String](Literal(Constant(escapeFunction(part))))
             reify(visitorExpr.splice(partExpr.splice))
           }
         }
@@ -222,13 +224,22 @@ final object Fastring {
           }
         c.Expr(c.universe.Block(valDefTrees.toList, newFastringExpr.tree))
       }
+
+      final def fast_impl(c: Context)(arguments: c.Expr[Any]*): c.Expr[Fastring] =
+        newLocalFastringClass(c, StringContext.treatEscapes)(arguments)
+
+      final def fastraw_impl(c: Context)(arguments: c.Expr[Any]*): c.Expr[Fastring] =
+        newLocalFastringClass(c, identity)(arguments)
+
     }
 
     implicit final class FastringContext(val stringContext: StringContext) extends AnyVal {
       import FastringContext._
 
-      @inline
+      final def fastraw(arguments: Any*) = macro fastraw_impl
+
       final def fast(arguments: Any*) = macro fast_impl
+
     }
 
     final object MkFastring {
