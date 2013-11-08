@@ -180,7 +180,7 @@ And a `filled` method for `Byte`, `Short`, `Int` and `Long`:
 
 ## Installation
 
-Put these lines in your `build.sbt` if you use Sbt(http://www.scala-sbt.org/) `0.12.x`:
+Put these lines in your `build.sbt` if you use [Sbt](http://www.scala-sbt.org/) `0.12.x`:
 
     libraryDependencies += "com.dongxiguo" %% "fastring" % "0.2.1"
     
