@@ -30,7 +30,7 @@ scalacOptions += "-unchecked"
 
 scalacOptions ++= Seq("-Xelide-below", "FINEST")
 
-crossScalaVersions := Seq("2.10.2")
+crossScalaVersions := Seq("2.10.4", "2.11.0")
 
 version := "0.2.3-SNAPSHOT"
 
