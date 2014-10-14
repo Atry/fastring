@@ -32,7 +32,7 @@ scalacOptions ++= Seq("-Xelide-below", "FINEST")
 
 crossScalaVersions := Seq("2.10.4", "2.11.0")
 
-version := "0.2.4"
+version := "0.2.5-SNAPSHOT"
 
 publishTo <<= (isSnapshot) { isSnapshot: Boolean =>
   if (isSnapshot)
