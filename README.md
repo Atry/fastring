@@ -1,5 +1,7 @@
 # Fastring
 
+[![Join the chat at https://gitter.im/Atry/fastring](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Atry/fastring?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 [![Build Status](https://travis-ci.org/Atry/fastring.svg)](https://travis-ci.org/Atry/fastring)
 
 **Fastring** is a string formatting library for [Scala](http://www.scala-lang.org/).
