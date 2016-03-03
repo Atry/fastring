@@ -6,3 +6,7 @@ target/
 .project
 .classpath
 .settings/
+
+# Files created for deployment
+secret/
+local.sbt
