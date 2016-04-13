@@ -30,16 +30,7 @@ scalacOptions += "-unchecked"
 
 scalacOptions ++= Seq("-Xelide-below", "FINEST")
 
-crossScalaVersions := Seq("2.10.4", "2.11.0")
-
-version := "0.2.5-SNAPSHOT"
-
-publishTo <<= (isSnapshot) { isSnapshot: Boolean =>
-  if (isSnapshot)
-    Some("snapshots" at "https://oss.sonatype.org/content/repositories/snapshots")
-  else
-    Some("releases" at "https://oss.sonatype.org/service/local/staging/deploy/maven2")
-}
+crossScalaVersions := Seq("2.10.6", "2.11.7", "2.12.0-M3")
 
 libraryDependencies <+= scalaVersion { sv =>
   "org.scala-lang" % "scala-reflect" % sv
@@ -56,12 +47,27 @@ scmInfo := Some(ScmInfo(
   "scm:git:git://github.com/Atry/fastring.git",
   Some("scm:git:git@github.com:Atry/fastring.git")))
 
-pomExtra :=
-  <developers>
-    <developer>
-      <id>Atry</id>
-      <name>杨博</name>
-      <timezone>+8</timezone>
-      <email>pop.atry@gmail.com</email>
-    </developer>
-  </developers>
+developers := List(
+  Developer(
+    "Atry",
+    "杨博 (Yang Bo)",
+    "pop.atry@gmail.com",
+    url("https://github.com/Atry")
+  )
+)
+
+import ReleaseTransformations._
+
+releasePublishArtifactsAction := PgpKeys.publishSigned.value
+
+releaseUseGlobalVersion := true
+
+releaseCrossBuild := true
+
+releaseProcess := {
+  releaseProcess.value.patch(releaseProcess.value.indexOf(pushChanges), Seq[ReleaseStep](releaseStepCommand("sonatypeRelease")), 0)
+}
+
+releaseProcess -= runClean
+
+releaseProcess -= runTest
