@@ -186,7 +186,7 @@ And a `filled` method for `Byte`, `Short`, `Int` and `Long`:
 
 Put these lines in your `build.sbt` if you use [Sbt](http://www.scala-sbt.org/):
 
-    libraryDependencies += "com.dongxiguo" %% "fastring" % "0.2.4"
+    libraryDependencies += "com.dongxiguo" %% "fastring" % "latest.release"
 
 See http://mvnrepository.com/artifact/com.dongxiguo/fastring_2.11/0.2.4 if you use [Maven](http://maven.apache.org/)
 or other build systems.
