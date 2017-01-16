@@ -94,7 +94,7 @@ final object FastringBenchmark {
       }
     }
 
-    println(fast"     Fastring: ${(System.nanoTime() - start).filled(10)}")
+    println(fast"     Fastring: ${(System.nanoTime() - start).leftPad(10)}")
   }
 
   final def test4() {
@@ -106,7 +106,7 @@ final object FastringBenchmark {
       }
     }
 
-    println(fast"            f: ${(System.nanoTime() - start).filled(10)}")
+    println(fast"            f: ${(System.nanoTime() - start).leftPad(10)}")
   }
 
   final def test2() {
@@ -118,7 +118,7 @@ final object FastringBenchmark {
       }
     }
 
-    println(fast"            s: ${(System.nanoTime() - start).filled(10)}")
+    println(fast"            s: ${(System.nanoTime() - start).leftPad(10)}")
   }
 
   final def test3() {
@@ -130,7 +130,7 @@ final object FastringBenchmark {
       }
     }
 
-    println(fast"StringBuilder: ${(System.nanoTime() - start).filled(10)}")
+    println(fast"StringBuilder: ${(System.nanoTime() - start).leftPad(10)}")
   }
 
   final def main(args: Array[String]) {

@@ -36,7 +36,7 @@ final class FastringTest {
     val a = 1
 
     Assert.assertEquals(
-      fast"baz $a foo ${a.filled(5, ' ')} bar".toString,
+      fast"baz $a foo ${a.leftPad(5, ' ')} bar".toString,
       f"baz $a foo $a% 5d bar")
   }
 
@@ -96,7 +96,7 @@ final class FastringTest {
     Assert.assertEquals(
       fast"baz $a foo ${
         (for (i <- 0 until 5) yield {
-          fast"i=${(-i).filled(3, '0')}"
+          fast"i=${(-i).leftPad(3, '0')}"
         }).mkFastring
       } bar".toString,
       s"baz $a foo ${

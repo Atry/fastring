@@ -171,16 +171,16 @@ There is a `mkFastring` method for `Seq`:
     // Got Fastring("Seq.mkString: Hello, world")
     fast"Seq.mkString: ${Seq("Hello", "world").mkString(", ")}"
 
-And a `filled` method for `Byte`, `Short`, `Int` and `Long`:
+And a `leftPad` method for `Byte`, `Short`, `Int` and `Long`:
 
-    // Enable filled method
+    // Enable leftPad method
     import com.dongxiguo.fastring.Fastring.Implicits._
     
-    // Got Fastring("Int.filled:   123")
-    fast"Int.filled: ${123.filled(5)}"
+    // Got Fastring("Int.leftPad:   123")
+    fast"Int.leftPad: ${123.leftPad(5)}"
     
-    // Got Fastring("Int.filled: 00123")
-    fast"Int.filled: ${123.filled(5, '0')}"
+    // Got Fastring("Int.leftPad: 00123")
+    fast"Int.leftPad: ${123.leftPad(5, '0')}"
 
 ## Installation
 
