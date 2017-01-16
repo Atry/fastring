@@ -1,10 +1,10 @@
 /*
- * Copyright 2012 杨博 (Yang Bo)
+ * Copyright 2017 杨博 (Yang Bo)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance at the License.
+ * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
@@ -13,14 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+name := "fastring"
 
-import sbt._
+organization := "com.dongxiguo"
 
-object BenchmarkBuild extends Build {
-  lazy val fastring = Project(id = "fastring", base = file("."))
+libraryDependencies +=
+  "com.novocode" % "junit-interface" % "0.7" % "test->default"
 
-  lazy val benchmark =
-    Project(id = "benchmark", base = file("benchmark")).dependsOn(fastring)
+scalacOptions += "-feature"
+
+scalacOptions += "-deprecation"
+
+scalacOptions += "-unchecked"
+
+scalacOptions ++= Seq("-Xelide-below", "FINEST")
+
+libraryDependencies <+= scalaVersion { sv =>
+  "org.scala-lang" % "scala-reflect" % sv
 }
-
-// vim: set ts=2 sw=2 et:

@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 杨博 (Yang Bo)
+ * Copyright 2012-2017 杨博 (Yang Bo)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,23 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-name := "fastring"
-
-organization := "com.dongxiguo"
-
-libraryDependencies +=
-  "com.novocode" % "junit-interface" % "0.7" % "test->default"
-
-scalacOptions += "-feature"
-
-scalacOptions += "-deprecation"
-
-scalacOptions += "-unchecked"
-
-scalacOptions ++= Seq("-Xelide-below", "FINEST")
-
 crossScalaVersions := Seq("2.10.6", "2.11.8", "2.12.1")
 
-libraryDependencies <+= scalaVersion { sv =>
-  "org.scala-lang" % "scala-reflect" % sv
-}
+lazy val fastring = crossProject in file(".")
+
+lazy val fastringJS = fastring.js.addSbtFiles(file("../shared/build.sbt.shared"))
+lazy val fastringJVM = fastring.js.addSbtFiles(file("../shared/build.sbt.shared"))
+
+lazy val benchmark = project.dependsOn(fastringJVM)
