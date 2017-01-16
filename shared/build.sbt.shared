@@ -13,10 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-name := "fastring"
-
-organization := "com.dongxiguo"
-
 libraryDependencies +=
   "com.novocode" % "junit-interface" % "0.7" % "test->default"
 

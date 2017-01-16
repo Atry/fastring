@@ -21,3 +21,5 @@ lazy val fastringJS = fastring.js.addSbtFiles(file("../shared/build.sbt.shared")
 lazy val fastringJVM = fastring.js.addSbtFiles(file("../shared/build.sbt.shared"))
 
 lazy val benchmark = project.dependsOn(fastringJVM)
+
+organization in ThisBuild := "com.dongxiguo"
