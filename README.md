@@ -3,6 +3,9 @@
 [![Join the chat at https://gitter.im/Atry/fastring](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Atry/fastring?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Build Status](https://travis-ci.org/Atry/fastring.svg)](https://travis-ci.org/Atry/fastring)
 [![Codacy Badge](https://www.codacy.com/project/badge/102a6c0e38de4a428eee7b06f5be31bd)](https://www.codacy.com/app/yangbo/fastring)
+[![Latest version](https://index.scala-lang.org/atry/fastring/fastring/latest.svg)](https://index.scala-lang.org/atry/fastring/fastring)
+[![Scaladoc](https://javadoc.io/badge/com.dongxiguo/fastring_2.12.svg?label=scaladoc)](https://javadoc.io/page/com.dongxiguo/fastring_2.12/latest/com/dongxiguo/fastring/index.html)
+
 
 **Fastring** is a string formatting library for [Scala](http://www.scala-lang.org/).
 `Fastring` is also designed to be a template engine,
