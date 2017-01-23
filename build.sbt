@@ -18,7 +18,7 @@ crossScalaVersions := Seq("2.10.6", "2.11.8", "2.12.1")
 lazy val fastring = crossProject in file(".")
 
 lazy val fastringJS = fastring.js.addSbtFiles(file("../shared/build.sbt.shared"))
-lazy val fastringJVM = fastring.js.addSbtFiles(file("../shared/build.sbt.shared"))
+lazy val fastringJVM = fastring.jvm.addSbtFiles(file("../shared/build.sbt.shared"))
 
 lazy val benchmark = project.dependsOn(fastringJVM)
 
