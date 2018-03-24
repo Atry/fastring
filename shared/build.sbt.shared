@@ -24,6 +24,5 @@ scalacOptions += "-unchecked"
 
 scalacOptions ++= Seq("-Xelide-below", "FINEST")
 
-libraryDependencies <+= scalaVersion { sv =>
-  "org.scala-lang" % "scala-reflect" % sv
-}
+libraryDependencies += "org.scala-lang" % "scala-reflect" % scalaVersion.value
+
