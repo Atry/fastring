@@ -191,7 +191,7 @@ Put these lines in your `build.sbt` if you use [Sbt](http://www.scala-sbt.org/):
 
     libraryDependencies += "com.dongxiguo" %% "fastring" % "latest.release"
 
-See http://mvnrepository.com/artifact/com.dongxiguo/fastring_2.11/0.2.4 if you use [Maven](http://maven.apache.org/)
+See http://mvnrepository.com/artifact/com.dongxiguo/fastring_2.12 if you use [Maven](http://maven.apache.org/)
 or other build systems.
 
-Note that `Fastring` requires [Scala](http://www.scala-lang.org/) `2.10` or `2.11`.
+Note that `Fastring` requires [Scala](http://www.scala-lang.org/) `2.10`, `2.11` or `2.12`.
