@@ -58,13 +58,76 @@ final object Fastring {
     override final def foreach[U](visitor: String => U) {}
   }
 
-  final class FromAny(any: Any) extends Fastring {
+  final class FromAny(from: Any) extends Fastring {
     @inline
     override final def foreach[U](visitor: String => U) {
-      visitor(any.toString)
+      visitor(String.valueOf(from))
     }
   }
 
+  final class FromCharArray(from: Array[Char]) extends Fastring {
+    @inline
+    override final def foreach[U](visitor: String => U) {
+      visitor(String.valueOf(from))
+    }
+  }
+
+  final class FromBoolean(from: Boolean) extends Fastring {
+    @inline
+    override final def foreach[U](visitor: String => U) {
+      visitor(String.valueOf(from))
+    }
+  }
+  
+  final class FromByte(from: Byte) extends Fastring {
+    @inline
+    override final def foreach[U](visitor: String => U) {
+      visitor(String.valueOf(from))
+    }
+  }
+
+  final class FromChar(from: Char) extends Fastring {
+    @inline
+    override final def foreach[U](visitor: String => U) {
+      visitor(String.valueOf(from))
+    }
+  }
+
+  final class FromShort(from: Short) extends Fastring {
+    @inline
+    override final def foreach[U](visitor: String => U) {
+      visitor(String.valueOf(from))
+    }
+  }
+
+  final class FromInt(from: Int) extends Fastring {
+    @inline
+    override final def foreach[U](visitor: String => U) {
+      visitor(String.valueOf(from))
+    }
+  }
+
+  final class FromLong(from: Long) extends Fastring {
+    @inline
+    override final def foreach[U](visitor: String => U) {
+      visitor(String.valueOf(from))
+    }
+  }
+
+  final class FromFloat(from: Float) extends Fastring {
+    @inline
+    override final def foreach[U](visitor: String => U) {
+      visitor(String.valueOf(from))
+    }
+  }
+
+  final class FromDouble(from: Double) extends Fastring {
+    @inline
+    override final def foreach[U](visitor: String => U) {
+      visitor(String.valueOf(from))
+    }
+  }
+  
   final class FromString(string: String) extends Fastring {
 
     @inline
@@ -125,7 +188,34 @@ final object Fastring {
   final def apply[A <: Fastring](fastring: A): A = fastring
 
   @inline
-  final def apply(any: Any) = new FromAny(any)
+  final def apply(from: Any) = new FromAny(from)
+
+  @inline
+  final def apply(from: Array[Char]) = new FromCharArray(from)
+
+  @inline
+  final def apply(from: Boolean) = new FromBoolean(from)
+
+  @inline
+  final def apply(from: Byte) = new FromByte(from)
+
+  @inline
+  final def apply(from: Char) = new FromChar(from)
+
+  @inline
+  final def apply(from: Short) = new FromShort(from)
+
+  @inline
+  final def apply(from: Int) = new FromInt(from)
+
+  @inline
+  final def apply(from: Long) = new FromLong(from)
+
+  @inline
+  final def apply(from: Float) = new FromFloat(from)
+
+  @inline
+  final def apply(from: Double) = new FromDouble(from)
 
   final def applyVarargs_impl(
       c: Context)(argument1: c.Expr[Any], argument2: c.Expr[Any], rest: c.Expr[Any]*): c.Expr[Fastring] = {
