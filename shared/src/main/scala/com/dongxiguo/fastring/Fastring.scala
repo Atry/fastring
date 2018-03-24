@@ -58,7 +58,7 @@ final object Fastring {
     override final def foreach[U](visitor: String => U) {}
   }
 
-  final class FromAny(any: Any) extends Fastring {
+  final class FromAny[@specialized A](any: A) extends Fastring {
     @inline
     override final def foreach[U](visitor: String => U) {
       visitor(any.toString)
@@ -125,7 +125,7 @@ final object Fastring {
   final def apply[A <: Fastring](fastring: A): A = fastring
 
   @inline
-  final def apply(any: Any) = new FromAny(any)
+  final def apply[A](any: A) = new FromAny[A](any)
 
   final def applyVarargs_impl(
       c: Context)(argument1: c.Expr[Any], argument2: c.Expr[Any], rest: c.Expr[Any]*): c.Expr[Fastring] = {
