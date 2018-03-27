@@ -17,13 +17,24 @@
 package com.dongxiguo.fastring.benchmark
 
 import com.dongxiguo.fastring.Fastring.Implicits._
+import org.openjdk.jmh.annotations.{Benchmark, Param, Scope, State}
 
-final object FastringBenchmark {
+/**
+  * @see This benchmark is copied from
+  */
+@State(Scope.Benchmark)
+class FastringBenchmark {
 
-  @volatile
-  var result: Any = ""
+  @Param(
+    Array(
+      "42", // A small integer in java.lang.Integer.IntegerCache
+      "999999" // A large interger that does not cache
+    ))
+  var a: Int = _
 
-  final def sb(sb: StringBuilder, a: Int) = {
+  @Benchmark
+  final def sb() = {
+    val sb: StringBuilder = new StringBuilder
     sb ++= "head "
     var first = true
     for (j <- 0 until 10 view) {
@@ -52,105 +63,28 @@ final object FastringBenchmark {
     sb
   }
 
-  final def s(a: Int) =
-    s"head ${
-      (for (j <- 0 until 10 view) yield {
-        s"baz$j $a foo ${
-          (for (i <- 0 until 4 view) yield {
-            s"$a i=$i"
-          }).mkString(",")
-        } bar\n"
-      }).mkString("<hr/>")
-    } tail"
+  @Benchmark
+  final def s() =
+    s"head ${(for (j <- 0 until 10 view) yield {
+      s"baz$j $a foo ${(for (i <- 0 until 4 view) yield {
+        s"$a i=$i"
+      }).mkString(",")} bar\n"
+    }).mkString("<hr/>")} tail"
 
-  final def f(a: Int) =
-    f"head ${
-      (for (j <- 0 until 10 view) yield {
-        f"baz$j $a foo ${
-          (for (i <- 0 until 4 view) yield {
-            f"$a i=$i"
-          }).mkString(",")
-        } bar\n"
-      }).mkString("<hr/>")
-    } tail"
+  @Benchmark
+  final def f() =
+    f"head ${(for (j <- 0 until 10 view) yield {
+      f"baz$j $a foo ${(for (i <- 0 until 4 view) yield {
+        f"$a i=$i"
+      }).mkString(",")} bar\n"
+    }).mkString("<hr/>")} tail"
 
-  final def fast(a: Int) =
-    fast"head ${
-      (for (j <- 0 until 10 view) yield {
-        fast"baz$j $a foo ${
-          (for (i <- 0 until 4 view) yield {
-            fast"$a i=$i"
-          }).mkFastring(",")
-        } bar\n"
-      }).mkFastring("<hr/>")
-    } tail"
+  @Benchmark
+  final def fast() =
+    fast"head ${(for (j <- 0 until 10 view) yield {
+      fast"baz$j $a foo ${(for (i <- 0 until 4 view) yield {
+        fast"$a i=$i"
+      }).mkFastring(",")} bar\n"
+    }).mkFastring("<hr/>")} tail".toString
 
-  final def test1() {
-    val start = System.nanoTime()
-
-    for (i <- 0 until 100) {
-      for (j <- 0 until 1000) {
-        result = fast(j).toString
-      }
-    }
-
-    println(fast"     Fastring: ${(System.nanoTime() - start).leftPad(10)}")
-  }
-
-  final def test4() {
-    val start = System.nanoTime()
-
-    for (i <- 0 until 100) {
-      for (j <- 0 until 1000) {
-        result = f(j)
-      }
-    }
-
-    println(fast"            f: ${(System.nanoTime() - start).leftPad(10)}")
-  }
-
-  final def test2() {
-    val start = System.nanoTime()
-
-    for (i <- 0 until 100) {
-      for (j <- 0 until 1000) {
-        result = s(j)
-      }
-    }
-
-    println(fast"            s: ${(System.nanoTime() - start).leftPad(10)}")
-  }
-
-  final def test3() {
-    val start = System.nanoTime()
-
-    for (i <- 0 until 100) {
-      for (j <- 0 until 1000) {
-        result = sb(new StringBuilder, j).toString
-      }
-    }
-
-    println(fast"StringBuilder: ${(System.nanoTime() - start).leftPad(10)}")
-  }
-
-  final def main(args: Array[String]) {
-    println("length:" + s(999).length)
-    println()
-
-    for (i <- 0 until 11) {
-      System.gc()
-      test1()
-
-      System.gc()
-      test2()
-
-      System.gc()
-      test3()
-
-      System.gc()
-      test4()
-
-      println()
-    }
-  }
 }

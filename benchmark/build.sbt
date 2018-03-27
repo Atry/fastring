@@ -1,1 +1,3 @@
 publishArtifact := false
+
+enablePlugins(JmhPlugin)
