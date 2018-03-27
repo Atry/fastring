@@ -2,11 +2,18 @@ enablePlugins(Travis)
 
 enablePlugins(SonatypeRelease)
 
-lazy val secret = project settings(publishArtifact := false) configure { secret =>
+lazy val secret = project.settings(publishArtifact := false).in {
+  val secretDirectory = file(sourcecode.File()).getParentFile / "secret"
   sys.env.get("SECRET_GIST") match {
     case Some(gist) =>
-      secret.addSbtFilesFromGit(gist, file("secret.sbt"))
+      IO.delete(secretDirectory)
+      org.eclipse.jgit.api.Git
+        .cloneRepository()
+        .setURI(gist)
+        .setDirectory(secretDirectory)
+        .call()
+        .close()
     case None =>
-      secret
   }
+  secretDirectory
 }
