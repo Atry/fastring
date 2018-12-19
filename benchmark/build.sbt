@@ -9,7 +9,7 @@ libraryDependencies ++= {
     case "2.12" =>
       Seq(
         "com.sizmek.fsi" %% "macros" % "0.1.0",
-        "io.gatling" % "gatling-charts" % "2.3.1"
+        "io.gatling" % "gatling-charts" % "3.0.2"
       )
     case _ =>
       Nil
