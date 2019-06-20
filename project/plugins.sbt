@@ -1,4 +1,4 @@
-addSbtPlugin("com.thoughtworks.sbt-best-practice" % "sbt-best-practice" % "4.2.0")
+addSbtPlugin("com.thoughtworks.sbt-best-practice" % "sbt-best-practice" % "7.1.0")
 
 addSbtPlugin("org.scala-js" % "sbt-scalajs" % "0.6.28")
 
