@@ -1,4 +1,4 @@
-publishArtifact := false
+publish / skip := true
 
 enablePlugins(JmhPlugin)
 

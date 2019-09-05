@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-crossScalaVersions in ThisBuild := Seq("2.10.6", "2.11.11", "2.12.4")
 
 lazy val fastring = crossProject in file(".")
 
@@ -23,3 +22,5 @@ lazy val fastringJVM = fastring.jvm
 lazy val benchmark = project.dependsOn(fastringJVM)
 
 organization in ThisBuild := "com.dongxiguo"
+
+publish / skip := true
