@@ -7,8 +7,13 @@ addons:
 
 language: scala
 
+scala:
+  - 2.10.6
+  - 2.11.11
+  - 2.12.9
+
 jdk:
-  - oraclejdk8
+  - openjdk8
 
 before_cache:
   - find $HOME/.sbt -name '*.lock' -delete
@@ -18,18 +23,16 @@ cache:
   directories:
     - $HOME/.ivy2/cache
     - $HOME/.sbt/boot/
+    - $HOME/.coursier/
 
 before_script:
-
-script:
-  - sbt +test
 
 before_deploy:
 
 deploy:
-  skip_cleanup: true
-  provider: script
-  script: sbt "release with-defaults"
-  on:
-    condition: -e ./deploy.sbt
-    all_branches: true
+  - provider: script
+    script: sbt ++$TRAVIS_SCALA_VERSION "sonatypeOpen \"Travis Job $TRAVIS_JOB_NAME $TRAVIS_JOB_NUMBER ($TRAVIS_JOB_WEB_URL)\"" publishSigned sonatypeRelease
+    skip_cleanup: true
+    on:
+      all_branches: true
+      condition: $GITHUB_PERSONAL_ACCESS_TOKEN
