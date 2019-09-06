@@ -24,3 +24,8 @@ lazy val benchmark = project.dependsOn(fastringJVM)
 organization in ThisBuild := "com.dongxiguo"
 
 publish / skip := true
+
+Global / parallelExecution := {
+  import Ordering.Implicits._
+  VersionNumber(scalaVersion.value).numbers >= Seq(2L, 12L)
+}
