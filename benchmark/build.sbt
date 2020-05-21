@@ -8,7 +8,7 @@ libraryDependencies ++= {
   scalaBinaryVersion.value match {
     case "2.12" =>
       Seq(
-        "com.sizmek.fsi" %% "macros" % "0.1.0",
+        "com.sizmek.fsi" %% "macros" % "0.2.0",
         "io.gatling" % "gatling-charts" % "2.3.1"
       )
     case _ =>
