@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-lazy val fastring = crossProject in file(".")
+lazy val fastring = (file(".") / crossProject)
 
 lazy val fastringJS = fastring.js
 lazy val fastringJVM = fastring.jvm
 
 lazy val benchmark = project.dependsOn(fastringJVM)
 
-organization in ThisBuild := "com.dongxiguo"
+(ThisBuild / organization) := "com.dongxiguo"
 
 publish / skip := true
 
