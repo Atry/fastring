@@ -6,8 +6,8 @@ import org.openjdk.jmh.annotations.{Benchmark, Scope, State}
 
 package com.dongxiguo.fastring.benchmark {
 
-  /**
-    * @author 杨博 (Yang Bo)
+  /** @author
+    *   杨博 (Yang Bo)
     */
   object AssertionsJUnitTemplateBenchmark {
 
@@ -31,7 +31,8 @@ package com.dongxiguo.fastring.benchmark {
           condition = Gt(1000.0)
         ),
         result = true,
-        message = "my assertion message blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah",
+        message =
+          "my assertion message blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah",
         None
       ),
       AssertionResult(
@@ -41,7 +42,8 @@ package com.dongxiguo.fastring.benchmark {
           condition = Gte(9999.99)
         ),
         result = true,
-        message = "my assertion message blah blah blah blah blah blah blah blah blah blah blah blah blah blah",
+        message =
+          "my assertion message blah blah blah blah blah blah blah blah blah blah blah blah blah blah",
         Some(12.3)
       ),
       AssertionResult(
@@ -51,24 +53,27 @@ package com.dongxiguo.fastring.benchmark {
           condition = Gte(9999.99)
         ),
         result = false,
-        message = "my assertion message blah blah blah blah blah blah blah blah blah blah blah blah",
+        message =
+          "my assertion message blah blah blah blah blah blah blah blah blah blah blah blah",
         None
       )
     )
 
-    /**
-      *
-      * @note This benchmark is a modified version of [[https://github.com/gatling/gatling/blob/62340816e95d212a4cee07b296a5c8dee73eaf59/gatling-charts/src/main/scala/io/gatling/charts/template/AssertionsJUnitTemplate.scala]]
+    /** @note
+      *   This benchmark is a modified version of
+      *   [[https://github.com/gatling/gatling/blob/62340816e95d212a4cee07b296a5c8dee73eaf59/gatling-charts/src/main/scala/io/gatling/charts/template/AssertionsJUnitTemplate.scala]]
       */
     @State(Scope.Benchmark)
     class FastringAssertionsJUnitTemplate {
 
-      private[this] def printMessage(assertionResult: AssertionResult): Fastring =
+      private[this] def printMessage(
+          assertionResult: AssertionResult
+      ): Fastring =
         if (assertionResult.result)
           fastraw"""<system-out>${assertionResult.message}</system-out>"""
         else
           fastraw"""<failure type="${assertionResult.assertion.path.printable}">Actual value: ${assertionResult.actualValue
-            .getOrElse(-1)}</failure>"""
+              .getOrElse(-1)}</failure>"""
 
       private[this] def print(assertionResult: AssertionResult): Fastring =
         fastraw"""<testcase name="${assertionResult.message}" status="${assertionResult.result}" time="0">
@@ -77,7 +82,7 @@ package com.dongxiguo.fastring.benchmark {
 
       def getOutput: Fastring =
         fastraw"""<testsuite name="${runMessage.simulationClassName}" tests="${assertionResults.size}" errors="0" failures="${assertionResults
-          .count(_.result == false)}" time="0">
+            .count(_.result == false)}" time="0">
 ${assertionResults.map(print).mkFastring(Eol)}
 </testsuite>"""
 
@@ -109,7 +114,7 @@ package com.sizmek.fsi.workaround {
         fraw"""<system-out>${assertionResult.message}</system-out>"""
       else
         fraw"""<failure type="${assertionResult.assertion.path.printable}">Actual value: ${assertionResult.actualValue
-          .getOrElse(-1)}</failure>"""
+            .getOrElse(-1)}</failure>"""
 
     private[this] def print(assertionResult: AssertionResult): String =
       fraw"""<testcase name="${assertionResult.message}" status="${assertionResult.result}" time="0">
@@ -118,7 +123,7 @@ package com.sizmek.fsi.workaround {
 
     def getOutput: String = {
       fraw"""<testsuite name="${runMessage.simulationClassName}" tests="${assertionResults.size}" errors="0" failures="${assertionResults
-        .count(_.result == false)}" time="0">
+          .count(_.result == false)}" time="0">
 ${assertionResults.map(print).mkString(Eol)}
 </testsuite>"""
     }

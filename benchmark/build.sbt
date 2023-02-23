@@ -16,6 +16,8 @@ libraryDependencies ++= {
   }
 }
 
-addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.1" cross CrossVersion.full)
+addCompilerPlugin(
+  "org.scalamacros" % "paradise" % "2.1.1" cross CrossVersion.full
+)
 
 evictionErrorLevel := Level.Info

@@ -27,7 +27,8 @@ final class FastringTest {
     val c = Seq(Seq("sss", "dd"), Seq("asdf"))
     Assert.assertEquals(
       fast"a $a aa ${c.mkFastring(",")}".toString,
-      s"a $a aa ${c.mkString(",")}")
+      s"a $a aa ${c.mkString(",")}"
+    )
   }
 
   @Test
@@ -37,7 +38,8 @@ final class FastringTest {
 
     Assert.assertEquals(
       fast"baz $a foo ${a.leftPad(5, ' ')} bar".toString,
-      f"baz $a foo $a% 5d bar")
+      f"baz $a foo $a% 5d bar"
+    )
   }
 
   @Test
@@ -46,10 +48,9 @@ final class FastringTest {
     val a = 1
 
     Assert.assertEquals(
-      fast"baz $a foo ${
-        fast"inner$a"
-      } bar".toString,
-      f"baz $a foo inner$a bar")
+      fast"baz $a foo ${fast"inner$a"} bar".toString,
+      f"baz $a foo inner$a bar"
+    )
   }
 
   @Test
@@ -58,16 +59,13 @@ final class FastringTest {
     val a = 1
 
     Assert.assertEquals(
-      fast"baz $a foo ${
-        (for (i <- 0 until 5) yield {
+      fast"baz $a foo ${(for (i <- 0 until 5) yield {
           s"i=$i"
-        }).mkFastring
-      } bar".toString,
-      s"baz $a foo ${
-        (for (i <- 0 until 5) yield {
+        }).mkFastring} bar".toString,
+      s"baz $a foo ${(for (i <- 0 until 5) yield {
           s"i=$i"
-        }).mkString
-      } bar")
+        }).mkString} bar"
+    )
   }
 
   @Test
@@ -76,16 +74,13 @@ final class FastringTest {
     def a = 1
 
     Assert.assertEquals(
-      fast"baz $a foo ${
-        (for (i <- 0 until 5) yield {
+      fast"baz $a foo ${(for (i <- 0 until 5) yield {
           fast"i=$i"
-        }).mkFastring
-      } bar".toString,
-      s"baz $a foo ${
-        (for (i <- 0 until 5) yield {
+        }).mkFastring} bar".toString,
+      s"baz $a foo ${(for (i <- 0 until 5) yield {
           s"i=$i"
-        }).mkString
-      } bar")
+        }).mkString} bar"
+    )
   }
 
   @Test
@@ -94,15 +89,12 @@ final class FastringTest {
     def a = 1
 
     Assert.assertEquals(
-      fast"baz $a foo ${
-        (for (i <- 0 until 5) yield {
+      fast"baz $a foo ${(for (i <- 0 until 5) yield {
           fast"i=${(-i).leftPad(3, '0')}"
-        }).mkFastring
-      } bar".toString,
-      s"baz $a foo ${
-        (for (i <- 0 until 5) yield {
+        }).mkFastring} bar".toString,
+      s"baz $a foo ${(for (i <- 0 until 5) yield {
           f"i=${-i}%03d"
-        }).mkString
-      } bar")
+        }).mkString} bar"
+    )
   }
 }
