@@ -22,7 +22,9 @@ import scala.collection.mutable.LazyBuilder
 import scala.collection.generic.CanBuildFrom
 import scala.reflect.macros.Context
 
-abstract class Fastring extends TraversableLike[String, Fastring] with Traversable[String] { self =>
+abstract class Fastring
+    extends TraversableLike[String, Fastring]
+    with Traversable[String] { self =>
   override final def seq = this
 
   override protected final def newBuilder = Fastring.newBuilder
@@ -46,7 +48,7 @@ abstract class Fastring extends TraversableLike[String, Fastring] with Traversab
     }
     sb.toString
   }
-  
+
   override final def toString = mkString
 
 }
@@ -78,7 +80,7 @@ final object Fastring {
       visitor(String.valueOf(from))
     }
   }
-  
+
   final class FromByte(from: Byte) extends Fastring {
     @inline
     override final def foreach[U](visitor: String => U) {
@@ -127,7 +129,7 @@ final object Fastring {
       visitor(String.valueOf(from))
     }
   }
-  
+
   final class FromString(string: String) extends Fastring {
 
     @inline
@@ -137,20 +139,29 @@ final object Fastring {
   }
 
   @deprecated(message = "Use `leftPad` instead", since = "0.3.0")
-  final class FilledLong(value: Long, minWidth: Int, filledChar: Char, radix: Int)
-      extends LeftPadLong(value, minWidth, filledChar, radix)
+  final class FilledLong(
+      value: Long,
+      minWidth: Int,
+      filledChar: Char,
+      radix: Int
+  ) extends LeftPadLong(value, minWidth, filledChar, radix)
 
-  class LeftPadLong(value: Long, minWidth: Int, filledChar: Char, radix: Int) extends Fastring {
+  class LeftPadLong(value: Long, minWidth: Int, filledChar: Char, radix: Int)
+      extends Fastring {
     @inline
     override final def foreach[U](visitor: String => U) {
       val unfilled = java.lang.Long.toString(value, radix)
       if (unfilled.length < minWidth) {
         if (value >= 0) {
-          visitor(new String(Array.fill(minWidth - unfilled.length)(filledChar)))
+          visitor(
+            new String(Array.fill(minWidth - unfilled.length)(filledChar))
+          )
           visitor(unfilled)
         } else {
           visitor("-")
-          visitor(new String(Array.fill(minWidth - unfilled.length)(filledChar)))
+          visitor(
+            new String(Array.fill(minWidth - unfilled.length)(filledChar))
+          )
           visitor(unfilled.substring(1))
         }
       } else {
@@ -163,17 +174,22 @@ final object Fastring {
   final class FilledInt(value: Int, minWidth: Int, filledChar: Char, radix: Int)
       extends LeftPadInt(value, minWidth, filledChar, radix)
 
-  class LeftPadInt(value: Int, minWidth: Int, filledChar: Char, radix: Int) extends Fastring {
+  class LeftPadInt(value: Int, minWidth: Int, filledChar: Char, radix: Int)
+      extends Fastring {
     @inline
     override final def foreach[U](visitor: String => U) {
       val unfilled = java.lang.Integer.toString(value, radix)
       if (unfilled.length < minWidth) {
         if (value >= 0) {
-          visitor(new String(Array.fill(minWidth - unfilled.length)(filledChar)))
+          visitor(
+            new String(Array.fill(minWidth - unfilled.length)(filledChar))
+          )
           visitor(unfilled)
         } else {
           visitor("-")
-          visitor(new String(Array.fill(minWidth - unfilled.length)(filledChar)))
+          visitor(
+            new String(Array.fill(minWidth - unfilled.length)(filledChar))
+          )
           visitor(unfilled.substring(1))
         }
       } else {
@@ -217,29 +233,45 @@ final object Fastring {
   @inline
   final def apply(from: Double) = new FromDouble(from)
 
-  final def applyVarargs_impl(
-      c: Context)(argument1: c.Expr[Any], argument2: c.Expr[Any], rest: c.Expr[Any]*): c.Expr[Fastring] = {
-    val visitorExpr = c.Expr[String => _](c.universe.Ident(c.universe.newTermName("visitor")))
+  final def applyVarargs_impl(c: Context)(
+      argument1: c.Expr[Any],
+      argument2: c.Expr[Any],
+      rest: c.Expr[Any]*
+  ): c.Expr[Fastring] = {
+    val visitorExpr =
+      c.Expr[String => _](c.universe.Ident(c.universe.newTermName("visitor")))
     val foreachBodyExpr = rest.foldLeft[c.Expr[Unit]](c.universe.reify {
-      _root_.com.dongxiguo.fastring.Fastring(argument1).foreach(visitorExpr.splice)
-      _root_.com.dongxiguo.fastring.Fastring(argument2).foreach(visitorExpr.splice)
+      _root_.com.dongxiguo.fastring
+        .Fastring(argument1)
+        .foreach(visitorExpr.splice)
+      _root_.com.dongxiguo.fastring
+        .Fastring(argument2)
+        .foreach(visitorExpr.splice)
     }) { (prefixExpr, argument) =>
       c.universe.reify {
         prefixExpr.splice
-        _root_.com.dongxiguo.fastring.Fastring(argument).foreach(visitorExpr.splice)
+        _root_.com.dongxiguo.fastring
+          .Fastring(argument)
+          .foreach(visitorExpr.splice)
       }
     }
     c.universe.reify {
       new _root_.com.dongxiguo.fastring.Fastring {
         @inline
-        override final def foreach[U](visitor: _root_.scala.Predef.String => U) {
+        override final def foreach[U](
+            visitor: _root_.scala.Predef.String => U
+        ) {
           foreachBodyExpr.splice
         }
       }
     }
   }
 
-  @inline final def apply(argument1: Any, argument2: Any, rest: Any*): Fastring = macro applyVarargs_impl
+  @inline final def apply(
+      argument1: Any,
+      argument2: Any,
+      rest: Any*
+  ): Fastring = macro applyVarargs_impl
 
   @inline
   final def apply(string: String) = new FromString(string)
@@ -272,14 +304,17 @@ final object Fastring {
 
     object FastringContext {
 
-      private def newLocalFastringClass(c: Context, escapeFunction: String => String)(
-          arguments: Seq[c.Expr[Any]]): c.Expr[Fastring] = {
+      private def newLocalFastringClass(
+          c: Context,
+          escapeFunction: String => String
+      )(arguments: Seq[c.Expr[Any]]): c.Expr[Fastring] = {
 
         import c.universe._
         val Apply(Select(Apply(_, List(Apply(_, partTrees))), _), _) =
           c.macroApplication
         assert(partTrees.length == arguments.length + 1)
-        val visitorExpr = c.Expr[String => _](c.universe.Ident(newTermName("visitor")))
+        val visitorExpr =
+          c.Expr[String => _](c.universe.Ident(newTermName("visitor")))
         val visitPartExprs = for (partTree <- partTrees) yield {
           val Literal(Constant(part: String)) = partTree
           if (part == "") {
@@ -291,29 +326,38 @@ final object Fastring {
           }
         }
         val visitAllExpr =
-          0.until(arguments.length).foldLeft[c.Expr[Unit]](c.Expr(c.universe.EmptyTree)) { (prefixExpr, i) =>
-            val argumentExpr = c.Expr[Any](c.universe.Ident(newTermName("__arguments" + i)))
-            val visitPartExpr = visitPartExprs(i)
-            c.universe.reify {
-              prefixExpr.splice
-              visitPartExpr.splice
-              _root_.com.dongxiguo.fastring.Fastring(argumentExpr.splice).foreach(visitorExpr.splice)
+          0.until(arguments.length)
+            .foldLeft[c.Expr[Unit]](c.Expr(c.universe.EmptyTree)) {
+              (prefixExpr, i) =>
+                val argumentExpr =
+                  c.Expr[Any](c.universe.Ident(newTermName("__arguments" + i)))
+                val visitPartExpr = visitPartExprs(i)
+                c.universe.reify {
+                  prefixExpr.splice
+                  visitPartExpr.splice
+                  _root_.com.dongxiguo.fastring
+                    .Fastring(argumentExpr.splice)
+                    .foreach(visitorExpr.splice)
+                }
             }
-          }
         // Workaround for https://issues.scala-lang.org/browse/SI-6711
         val valDefTrees =
           (for ((argumentExpr, i) <- arguments.iterator.zipWithIndex) yield {
-            c.universe.ValDef(c.universe.Modifiers(),
-                              c.universe.newTermName("__arguments" + i),
-                              c.universe.TypeTree(),
-                              argumentExpr.tree)
+            c.universe.ValDef(
+              c.universe.Modifiers(),
+              c.universe.newTermName("__arguments" + i),
+              c.universe.TypeTree(),
+              argumentExpr.tree
+            )
           })
         val visitLastPartExpr = visitPartExprs(arguments.length)
         val newFastringExpr =
           c.universe.reify {
             new _root_.com.dongxiguo.fastring.Fastring {
               @inline
-              override final def foreach[U](visitor: _root_.scala.Predef.String => U) {
+              override final def foreach[U](
+                  visitor: _root_.scala.Predef.String => U
+              ) {
                 visitAllExpr.splice
                 visitLastPartExpr.splice
               }
@@ -322,15 +366,20 @@ final object Fastring {
         c.Expr(c.universe.Block(valDefTrees.toList, newFastringExpr.tree))
       }
 
-      final def fast_impl(c: Context)(arguments: c.Expr[Any]*): c.Expr[Fastring] =
+      final def fast_impl(c: Context)(
+          arguments: c.Expr[Any]*
+      ): c.Expr[Fastring] =
         newLocalFastringClass(c, StringContext.treatEscapes)(arguments)
 
-      final def fastraw_impl(c: Context)(arguments: c.Expr[Any]*): c.Expr[Fastring] =
+      final def fastraw_impl(c: Context)(
+          arguments: c.Expr[Any]*
+      ): c.Expr[Fastring] =
         newLocalFastringClass(c, identity)(arguments)
 
     }
 
-    implicit final class FastringContext(val stringContext: StringContext) extends AnyVal {
+    implicit final class FastringContext(val stringContext: StringContext)
+        extends AnyVal {
       import FastringContext._
 
       final def fastraw(arguments: Any*) = macro fastraw_impl
@@ -350,16 +399,22 @@ final object Fastring {
           val m = mkFastringExpr.splice
           new _root_.com.dongxiguo.fastring.Fastring {
             @inline
-            override final def foreach[U](visitor: _root_.scala.Predef.String => U) {
+            override final def foreach[U](
+                visitor: _root_.scala.Predef.String => U
+            ) {
               for (subCollection <- m.underlying) {
-                _root_.com.dongxiguo.fastring.Fastring(subCollection).foreach(visitor)
+                _root_.com.dongxiguo.fastring
+                  .Fastring(subCollection)
+                  .foreach(visitor)
               }
             }
           }
         }
       }
 
-      final def mkFastringWithSeperator_impl(c: Context)(seperator: c.Expr[String]): c.Expr[Fastring] = {
+      final def mkFastringWithSeperator_impl(
+          c: Context
+      )(seperator: c.Expr[String]): c.Expr[Fastring] = {
         import c.universe._
         val Apply(Select(mkFastringTree, _), _) = c.macroApplication
         val mkFastringExpr = c.Expr[MkFastring[_]](mkFastringTree)
@@ -369,7 +424,9 @@ final object Fastring {
           val m = mkFastringExpr.splice
           new _root_.com.dongxiguo.fastring.Fastring {
             @inline
-            override final def foreach[U](visitor: _root_.scala.Predef.String => U) {
+            override final def foreach[U](
+                visitor: _root_.scala.Predef.String => U
+            ) {
               var first = true
               for (subCollection <- m.underlying) {
                 if (first) {
@@ -377,7 +434,9 @@ final object Fastring {
                 } else {
                   visitor(s)
                 }
-                _root_.com.dongxiguo.fastring.Fastring(subCollection).foreach(visitor)
+                _root_.com.dongxiguo.fastring
+                  .Fastring(subCollection)
+                  .foreach(visitor)
               }
             }
           }
@@ -385,21 +444,29 @@ final object Fastring {
       }
     }
 
-    implicit final class MkFastring[A](val underlying: TraversableOnce[A]) extends AnyVal {
+    implicit final class MkFastring[A](val underlying: TraversableOnce[A])
+        extends AnyVal {
       import MkFastring._
       final def mkFastring: Fastring = macro mkFastring_impl
-      final def mkFastring(seperator: String): Fastring = macro mkFastringWithSeperator_impl
+      final def mkFastring(seperator: String): Fastring =
+        macro mkFastringWithSeperator_impl
     }
 
-    implicit final class ArrayMkFastring[A](val underlying: Array[A]) extends AnyVal {
+    implicit final class ArrayMkFastring[A](val underlying: Array[A])
+        extends AnyVal {
       import MkFastring._
       final def mkFastring: Fastring = macro mkFastring_impl
-      final def mkFastring(seperator: String): Fastring = macro mkFastringWithSeperator_impl
+      final def mkFastring(seperator: String): Fastring =
+        macro mkFastringWithSeperator_impl
     }
 
     implicit final class LongLeftPadOps(val underlying: Long) extends AnyVal {
       @inline
-      final def leftPad(minWidth: Int, filledChar: Char = ' ', radix: Int = 10) =
+      final def leftPad(
+          minWidth: Int,
+          filledChar: Char = ' ',
+          radix: Int = 10
+      ) =
         new LeftPadLong(underlying, minWidth, filledChar, radix)
     }
 
@@ -413,7 +480,11 @@ final object Fastring {
 
     implicit final class IntLeftPadOps(val underlying: Int) extends AnyVal {
       @inline
-      final def leftPad(minWidth: Int, filledChar: Char = ' ', radix: Int = 10) =
+      final def leftPad(
+          minWidth: Int,
+          filledChar: Char = ' ',
+          radix: Int = 10
+      ) =
         new LeftPadInt(underlying, minWidth, filledChar, radix)
     }
 

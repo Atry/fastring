@@ -19,8 +19,8 @@ package com.dongxiguo.fastring.benchmark
 import com.dongxiguo.fastring.Fastring.Implicits._
 import org.openjdk.jmh.annotations.{Benchmark, Param, Scope, State}
 
-/**
-  * @see This benchmark is copied from
+/** @see
+  *   This benchmark is copied from
   */
 @State(Scope.Benchmark)
 class FastringBenchmark {
@@ -29,7 +29,8 @@ class FastringBenchmark {
     Array(
       "42", // A small integer in java.lang.Integer.IntegerCache
       "999999" // A large interger that does not cache
-    ))
+    )
+  )
   var a: Int = _
 
   @Benchmark
@@ -66,25 +67,25 @@ class FastringBenchmark {
   @Benchmark
   final def s() =
     s"head ${(for (j <- 0 until 10 view) yield {
-      s"baz$j $a foo ${(for (i <- 0 until 4 view) yield {
-        s"$a i=$i"
-      }).mkString(",")} bar\n"
-    }).mkString("<hr/>")} tail"
+        s"baz$j $a foo ${(for (i <- 0 until 4 view) yield {
+            s"$a i=$i"
+          }).mkString(",")} bar\n"
+      }).mkString("<hr/>")} tail"
 
   @Benchmark
   final def f() =
     f"head ${(for (j <- 0 until 10 view) yield {
-      f"baz$j $a foo ${(for (i <- 0 until 4 view) yield {
-        f"$a i=$i"
-      }).mkString(",")} bar\n"
-    }).mkString("<hr/>")} tail"
+        f"baz$j $a foo ${(for (i <- 0 until 4 view) yield {
+            f"$a i=$i"
+          }).mkString(",")} bar\n"
+      }).mkString("<hr/>")} tail"
 
   @Benchmark
   final def fast() =
     fast"head ${(for (j <- 0 until 10 view) yield {
-      fast"baz$j $a foo ${(for (i <- 0 until 4 view) yield {
-        fast"$a i=$i"
-      }).mkFastring(",")} bar\n"
-    }).mkFastring("<hr/>")} tail".toString
+        fast"baz$j $a foo ${(for (i <- 0 until 4 view) yield {
+            fast"$a i=$i"
+          }).mkFastring(",")} bar\n"
+      }).mkFastring("<hr/>")} tail".toString
 
 }
