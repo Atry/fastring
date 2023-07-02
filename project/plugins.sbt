@@ -1,5 +1,5 @@
 addSbtPlugin(
-  "com.thoughtworks.sbt-best-practice" % "sbt-best-practice" % "8.3.0"
+  "com.thoughtworks.sbt-best-practice" % "sbt-best-practice" % "8.3.1"
 )
 
 addSbtPlugin("org.xerial.sbt" % "sbt-sonatype" % "3.9.20")
