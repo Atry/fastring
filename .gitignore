@@ -1,4 +1,14 @@
+# sbt specific
 target/
+
+# Scala-IDE specific
+.cache
+.project
+.classpath
+.settings/
+
+# Files created for deployment
+secret/
 local.sbt
 secret/
 .metals/
